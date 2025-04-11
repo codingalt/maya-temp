@@ -93,7 +93,7 @@ export default function EventsPage() {
   );
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-y-auto lg:overflow-y-hidden">
       <div className="flex-1">
         <Calendar onDaySelect={handleDaySelect} />
       </div>

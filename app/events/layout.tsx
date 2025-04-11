@@ -44,8 +44,6 @@ export default function EventsLayout({
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
   const [isLeftMenuOpen, setIsLeftMenuOpen] = useState<boolean>(false);
-
-  console.log("selectedEvents", selectedEvents);
   
   return (
     <CalendarContext.Provider

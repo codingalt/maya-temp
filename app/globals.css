@@ -630,7 +630,7 @@ body {
     border-radius: 50% !important;
     margin: 0 auto !important;
     padding: 0 !important;
-    @apply dark:!bg-gradient-to-r from-[#9B87F5] to-purple-700 bg-[#262626];
+    @apply !bg-gradient-to-r from-[#9B87F5] to-purple-700;
   }
 
   /* 4. When day is both today AND selected, prioritize selected styling */

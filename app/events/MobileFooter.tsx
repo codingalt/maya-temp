@@ -34,7 +34,6 @@ export default function MobileFooter({
   onClose,
 }: MobileFooterProps) {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [showModal, setShowModal] = useState(false);
 
   // Format date for display
   const formatDate = () => {
@@ -48,11 +47,9 @@ export default function MobileFooter({
 
   const handleEventClick = (event: Event) => {
     setSelectedEvent(event);
-    setShowModal(true);
   };
 
   const handleCloseModal = () => {
-    setShowModal(false);
     setSelectedEvent(null);
   };
 

@@ -10,7 +10,6 @@ import timelinePlugin from "@fullcalendar/timeline";
 import Toolbar from "./Toolbar";
 import EventModal from "./EventModal";
 import { format, isSameDay } from "date-fns";
-import MobileFooter from "./MobileFooter";
 import { useMediaQuerySafe } from "@/hooks/useMediaQuery";
 import { updateUrlWithDate, getDateFromUrl } from "@/utils/urlUtils";
 
@@ -88,11 +87,6 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
     false
   );
 
-  const [showMobileFooter, setShowMobileFooter] = useState(false);
-
-  // Track if Today button was just clicked
-  const [todayButtonClicked, setTodayButtonClicked] = useState(false);
-
   // Use a ref to track if the initial update has been sent
   const initialUpdateSent = useRef(false);
   const initialUrlCheckDone = useRef(false);
@@ -116,11 +110,6 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
       initialUrlCheckDone.current = true;
     }
   }, []);
-
-  // Update showMobileFooter when isMediumDevice changes
-  useEffect(() => {
-    setShowMobileFooter(isMediumDevice);
-  }, [isMediumDevice]);
 
   // Change view based on screen size
   useEffect(() => {
@@ -204,7 +193,6 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
 
   // Calendar toolbar event handlers
   const handleDateToday = () => {
-    setTodayButtonClicked(true);
 
     const calendarEl = calendarRef.current;
     if (calendarEl) {
@@ -347,7 +335,7 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
             eventDisplay="block"
             allDayMaintainDuration={true}
             eventResizableFromStart={false}
-            viewClassNames={customViewClassNames}
+            // viewClassNames={customViewClassNames}
             moreLinkClick="week"
           />
         </div>

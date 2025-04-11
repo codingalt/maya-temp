@@ -10,7 +10,6 @@ import {
   Category,
   Grid6,
   TableDocument,
-  TickCircle,
 } from "iconsax-react";
 import { PanelLeftOpen, PanelRightOpen } from "lucide-react";
 import { CalendarContext } from "./layout";

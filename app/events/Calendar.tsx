@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
@@ -12,6 +12,7 @@ import EventModal from "./EventModal";
 import { format, isSameDay } from "date-fns";
 import { useMediaQuerySafe } from "@/hooks/useMediaQuery";
 import { updateUrlWithDate, getDateFromUrl } from "@/utils/urlUtils";
+import { CalendarContext } from "./layout";
 
 // Define the event type
 interface Event {
@@ -24,7 +25,7 @@ interface Event {
   end: Date;
 }
 
-// Sample events - replace with your API call
+// Sample events - ensure these match exactly with the events in page.tsx
 const sampleEvents: Event[] = [
   {
     id: "1",
@@ -32,8 +33,8 @@ const sampleEvents: Event[] = [
     description: "Discuss project progress",
     textColor: "#ffffff",
     allDay: false,
-    start: new Date(2025, 3, 12, 10, 0),
-    end: new Date(2025, 3, 12, 12, 0),
+    start: new Date(2025, 3, 13, 10, 0),
+    end: new Date(2025, 3, 13, 12, 0),
   },
   {
     id: "2",
@@ -69,12 +70,20 @@ interface CalendarProps {
 }
 
 export default function Calendar({ onDaySelect }: CalendarProps) {
+  // Get context to directly update events
+  const {
+    selectedDate: contextDate,
+    selectedEvents: contextEvents,
+    setSelectedDate,
+    setSelectedEvents,
+  } = useContext(CalendarContext);
+
   // State hooks
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | undefined>();
   const [calendarView, setCalendarView] = useState<string>("dayGridMonth");
   const [date, setDate] = useState<Date>(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setLocalSelectedDate] = useState<Date>(new Date());
   const [events, setEvents] = useState<Event[]>(sampleEvents);
 
   const isMediumDevice = useMediaQuerySafe(
@@ -88,23 +97,62 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
-  // Check for date in URL on first render and set selected date if present
+  // Get events for a specific date
+  const getEventsForDate = (date: Date) => {
+    const dateString = format(date, "yyyy-MM-dd");
+    return events.filter((event) => {
+      const eventDateStr = format(new Date(event.start), "yyyy-MM-dd");
+      return eventDateStr === dateString;
+    });
+  };
+
+  // Only run URL check from Calendar if page.tsx hasn't already done it
+  // Check if context already has events for this date
   useEffect(() => {
     if (!initialUrlCheckDone.current && typeof window !== "undefined") {
       const urlDate = getDateFromUrl();
-      if (urlDate) {
-        setSelectedDate(urlDate);
-        setDate(urlDate);
+
+      // If URL has a date but context doesn't have matching events, then process it
+      if (urlDate && (!contextEvents || contextEvents.length === 0)) {
+        console.log("Calendar handling URL date:", urlDate);
+        let dateToUse = urlDate;
+
+        setLocalSelectedDate(dateToUse);
+        setDate(dateToUse);
+
+        // Update context date (in case page.tsx didn't already)
+        setSelectedDate(dateToUse);
 
         // If we have a calendar reference, navigate to this date
         if (calendarRef.current) {
           const calendarApi = calendarRef.current.getApi();
-          calendarApi.gotoDate(urlDate);
+          calendarApi.gotoDate(dateToUse);
         }
+
+        // Important: Filter and set events for the initial date
+        const initialEvents = getEventsForDate(dateToUse);
+
+        // Update context
+        setSelectedEvents(initialEvents);
       }
+
       initialUrlCheckDone.current = true;
     }
-  }, []);
+  }, [contextEvents, setSelectedDate, setSelectedEvents]);
+
+  // Additional effect to ensure sync with context date
+  useEffect(() => {
+    if (contextDate && !isSameDay(contextDate, selectedDate)) {
+      setLocalSelectedDate(contextDate);
+      setDate(contextDate);
+
+      // If calendar is ready, navigate to this date
+      if (calendarRef.current) {
+        const calendarApi = calendarRef.current.getApi();
+        calendarApi.gotoDate(contextDate);
+      }
+    }
+  }, [contextDate, selectedDate]);
 
   // Change view based on screen size
   useEffect(() => {
@@ -146,21 +194,6 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
             // Check if this cell is the selected date
             if (isSameDay(cellDate, selectedDate)) {
               cell.classList.add("selected-day");
-
-              // Apply background color to the frame inside selected day
-              const dayFrame = cell.querySelector(".fc-daygrid-day-frame");
-              if (dayFrame) {
-              }
-            }
-
-            // If the cell is today (and not the selected day), apply today styling
-            if (
-              isSameDay(cellDate, today) &&
-              !isSameDay(cellDate, selectedDate)
-            ) {
-              const dayFrame = cell.querySelector(".fc-daygrid-day-frame");
-              if (dayFrame) {
-              }
             }
           }
         });
@@ -170,25 +203,8 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
     }, 0);
   }, [selectedDate, date]);
 
-  // Initial load of selected date events
-  useEffect(() => {
-    if (!initialUpdateSent.current) {
-      // Filter events for the selected date
-      const dateString = format(selectedDate, "yyyy-MM-dd");
-      const dateEvents = events.filter((event) => {
-        const eventDateStr = format(new Date(event.start), "yyyy-MM-dd");
-        return eventDateStr === dateString;
-      });
-
-      // Send the initial update
-      onDaySelect(selectedDate, dateEvents);
-      initialUpdateSent.current = true;
-    }
-  }, [selectedDate, events, onDaySelect]);
-
   // Calendar toolbar event handlers
   const handleDateToday = () => {
-
     const calendarEl = calendarRef.current;
     if (calendarEl) {
       const calendarApi = calendarEl.getApi();
@@ -201,17 +217,17 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
 
       // Update state to match
       setDate(todayDate);
+      setLocalSelectedDate(todayDate);
       setSelectedDate(todayDate);
 
       // Update the URL with today's date
       updateUrlWithDate(todayDate);
 
       // Filter events for today
-      const todayDateStr = format(todayDate, "yyyy-MM-dd");
-      const todayEvents = events.filter((event) => {
-        const eventDateStr = format(new Date(event.start), "yyyy-MM-dd");
-        return eventDateStr === todayDateStr;
-      });
+      const todayEvents = getEventsForDate(todayDate);
+
+      // Update context
+      setSelectedEvents(todayEvents);
 
       // Send update to parent component
       onDaySelect(todayDate, todayEvents);
@@ -219,11 +235,14 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
   };
 
   const handleViewChange = (newView: string) => {
-    const calendarEl = calendarRef.current;
-    if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      calendarApi.changeView(newView);
-      setCalendarView(newView);
+    // Only allow Month or Agenda views
+    if (newView === "dayGridMonth" || newView === "listWeek") {
+      const calendarEl = calendarRef.current;
+      if (calendarEl) {
+        const calendarApi = calendarEl.getApi();
+        calendarApi.changeView(newView);
+        setCalendarView(newView);
+      }
     }
   };
 
@@ -248,18 +267,18 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
   // Calendar event handlers - UPDATED FUNCTION
   const handleDateClick = (arg: any) => {
     // Update selected date
-    setSelectedDate(arg.date);
+    setLocalSelectedDate(arg.date);
     setDate(arg.date);
+    setSelectedDate(arg.date);
 
     // Update URL with the selected date
     updateUrlWithDate(arg.date);
 
-    // Filter events for this date
-    const clickedDate = format(arg.date, "yyyy-MM-dd");
-    const dateEvents = events.filter((event) => {
-      const eventDateStr = format(new Date(event.start), "yyyy-MM-dd");
-      return eventDateStr === clickedDate;
-    });
+    // Get events for this date
+    const dateEvents = getEventsForDate(arg.date);
+
+    // Update context directly
+    setSelectedEvents(dateEvents);
 
     // Send update to parent component
     onDaySelect(arg.date, dateEvents);
@@ -277,13 +296,6 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
   const handleCloseModal = () => {
     setSelectedEvent(undefined);
     setModalOpen(false);
-  };
-
-  // Custom view class helper
-  const customViewClassNames = () => {
-    return {
-      "calendar-custom-view": true,
-    };
   };
 
   return (
@@ -330,8 +342,22 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
             eventDisplay="block"
             allDayMaintainDuration={true}
             eventResizableFromStart={false}
-            // viewClassNames={customViewClassNames}
             moreLinkClick="week"
+            views={{
+              dayGridMonth: {
+                // Month view options
+                titleFormat: { month: "long", year: "numeric" },
+              },
+              listWeek: {
+                // Agenda view options
+                titleFormat: { month: "long", year: "numeric" },
+                listDayFormat: {
+                  weekday: "long",
+                  month: "short",
+                  day: "numeric",
+                },
+              },
+            }}
           />
         </div>
       </div>

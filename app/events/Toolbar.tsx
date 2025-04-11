@@ -4,14 +4,10 @@ import { useState, useEffect, useContext } from "react";
 import { format } from "date-fns";
 
 import {
-  ArrowLeft2,
-  ArrowRight2,
-  Calendar1,
   Category,
-  Grid6,
   TableDocument,
 } from "iconsax-react";
-import { PanelLeftOpen, PanelRightOpen } from "lucide-react";
+import { ChevronLeft, ChevronRight, PanelLeftOpen, PanelRightOpen } from "lucide-react";
 import { CalendarContext } from "./layout";
 import { useMediaQuerySafe } from "@/hooks/useMediaQuery";
 
@@ -46,7 +42,6 @@ export default function Toolbar({
   onClickToday,
   onChangeView,
 }: ToolbarProps) {
-  // const [isMobile, setIsMobile] = useState(false);
   const isMobile = useMediaQuerySafe(
     "only screen and (max-width : 992px)",
     false
@@ -54,7 +49,6 @@ export default function Toolbar({
   const [viewFilter, setViewFilter] = useState(viewOptions);
   const { isLeftMenuOpen, setIsLeftMenuOpen } = useContext(CalendarContext);
   const [isTodayActive, setIsTodayActive] = useState(false);
-  console.log(date);
 
   // Check if current date is today
   useEffect(() => {
@@ -66,20 +60,6 @@ export default function Toolbar({
 
     setIsTodayActive(isToday);
   }, [date]);
-
-  // Check for mobile view
-  // useEffect(() => {
-  //   const checkMobile = () => {
-  //     setIsMobile(window.innerWidth < 992); // sm breakpoint
-  //   };
-
-  //   checkMobile(); // Check on initial load
-  //   window.addEventListener("resize", checkMobile);
-
-  //   return () => {
-  //     window.removeEventListener("resize", checkMobile);
-  //   };
-  // }, []);
 
   // Filter views for mobile
   useEffect(() => {
@@ -105,7 +85,7 @@ export default function Toolbar({
         {/* Toggle Left Menu Button  */}
         <button
           onClick={() => setIsLeftMenuOpen(!isLeftMenuOpen)}
-          className="w-5 h-5 cursor-pointer text-gray-600 bg-transparent rounded-full flex items-center justify-center"
+          className="w-5 h-5 cursor-pointer text-gray-600 dark:text-white/80 bg-transparent rounded-full flex items-center justify-center"
         >
           {isMobile ? (
             isLeftMenuOpen ? (
@@ -124,7 +104,7 @@ export default function Toolbar({
           <button
             className={`px-4 py-1.5 text-xs ${
               isTodayActive && "ring-purple-400 ring-1"
-            } rounded-full bg-white hover:bg-gray-50 text-gray-600 transition-all cursor-pointer hover:border-gray-200 hover:text-gray-900 flex items-center justify-center`}
+            } rounded-full bg-white hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-800 dark:text-white text-gray-600 transition-all cursor-pointer hover:border-gray-200 hover:text-gray-900 dark:hover:text-white flex items-center justify-center`}
             onClick={handleTodayClick}
           >
             Today
@@ -135,23 +115,23 @@ export default function Toolbar({
       {/* Date navigation */}
       <div className="flex items-center justify-center space-x-1.5">
         <button
-          className="w-7 h-7 text-gray-900 rounded-full hover:bg-gray-200 transition-colors cursor-pointer flex items-center justify-center"
+          className="w-7 h-7 text-[#555] dark:text-white/80 dark:hover:bg-slate-800 rounded-full hover:bg-gray-200 transition-colors cursor-pointer flex items-center justify-center"
           onClick={onClickPrev}
           aria-label="Previous"
         >
-          <ArrowLeft2 size="16" color="#555" />
+          <ChevronLeft size="16" />
         </button>
 
-        <h3 className="font-medium text-gray-700">
+        <h3 className="font-medium text-gray-700 dark:text-white">
           {format(date, "MMMM yyyy")}
         </h3>
 
         <button
-          className="w-7 h-7 rounded-full hover:bg-gray-200 transition-colors cursor-pointer flex items-center justify-center"
+          className="w-7 h-7 rounded-full hover:bg-gray-200 text-[#555] dark:text-white/80 dark:hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center"
           onClick={onClickNext}
           aria-label="Next"
         >
-          <ArrowRight2 size="16" color="#555" />
+          <ChevronRight size="16" />
         </button>
       </div>
 
@@ -173,7 +153,7 @@ export default function Toolbar({
                   ${
                     isActive
                       ? "bg-gradient-to-r from-[#9B87F5] to-purple-700 text-white z-10"
-                      : "text-gray-700 hover:bg-gray-50"
+                      : "text-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800"
                   }
                   ${viewFilter.indexOf(viewOption) === 0 ? "rounded-l-md" : ""}
                   ${
@@ -182,15 +162,25 @@ export default function Toolbar({
                       : ""
                   }
                   ${viewFilter.indexOf(viewOption) !== 0 ? "-ml-px" : ""}
-                  border border-gray-300
+                  border border-gray-300 dark:border-gray-600
                   focus:z-10 focus:outline-none 
                   transition-colors
                 `}
               >
+                <div className="dark:hidden">
+                  <Icon
+                    variant={viewOption.value === view ? "Bold" : "Linear"}
+                    color={isActive ? "#fff" : "#555"}
+                    size={16}
+                    className="text-white"
+                  />
+                </div>
+
                 <Icon
                   variant={viewOption.value === view ? "Bold" : "Linear"}
-                  color={isActive ? "#fff" : "#555"}
+                  color={isActive ? "#fff" : "lightgray"}
                   size={16}
+                  className="text-white hidden dark:block"
                 />
               </button>
             );

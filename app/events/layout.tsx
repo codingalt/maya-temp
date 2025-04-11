@@ -45,6 +45,8 @@ export default function EventsLayout({
   const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
   const [isLeftMenuOpen, setIsLeftMenuOpen] = useState<boolean>(false);
 
+  console.log("selectedEvents", selectedEvents);
+  
   return (
     <CalendarContext.Provider
       value={{
@@ -57,15 +59,15 @@ export default function EventsLayout({
       }}
     >
       <div
-        className="flex w-full lg:h-screen flex-col overflow-y-auto lg:overflow-y-hidden lg:overflow-hidden"
+        className="flex w-full lg:h-screen flex-col overflow-y-auto lg:overflow-y-hidden lg:overflow-hidden dark:bg-[#121212]"
         dir="ltr"
       >
         {/* Header */}
-        <nav className="flex h-12 w-full shrink-0 flex-row items-center justify-between gap-2 border-b border-slate-100 bg-white px-8 text-[#262626] dark:border-slate-800">
+        <nav className="flex h-12 w-full shrink-0 flex-row items-center justify-between gap-2 border-b border-slate-100 bg-white px-8 text-[#262626] dark:border-slate-800 dark:bg-[#000000ce]">
           <div className="mx-auto flex h-[50px] md:h-[60px] w-full flex-row items-center gap-3 px-4 md:max-w-screen-lg md:px-8">
             {/* Logo on the left */}
             <Link href="/">
-              <div className="flex flex-row items-center cursor-pointer">
+              <div className="flex flex-row items-center cursor-pointer dark:text-white">
                 <Image
                   src="/images/maya-logo.png"
                   alt="Maya Logo"
@@ -81,7 +83,7 @@ export default function EventsLayout({
             {/* Calendar icon on the right */}
             <Link
               href={"/events"}
-              className="hidden md:flex cursor-pointer size-8 flex-col rounded-md text-slate-500 items-center justify-center hover:bg-slate-50 active:bg-slate-100 transition-colors"
+              className="hidden md:flex cursor-pointer size-8 flex-col rounded-md text-slate-500 dark:text-white/80 items-center justify-center hover:bg-slate-50 active:bg-slate-100 transition-colors"
             >
               <BsArrowReturnRight size={24} />
             </Link>
@@ -90,7 +92,7 @@ export default function EventsLayout({
         </nav>
 
         {/* Main content with 3 columns */}
-        <div className="flex flex-col lg:flex-row relative w-full lg:flex-1 justify-center overflow-y-auto lg:overflow-y-hidden lg:overflow-hidden bg-[#f7f7f7] lg:bg-white">
+        <div className="flex flex-col lg:flex-row relative w-full lg:flex-1 justify-center overflow-y-auto lg:overflow-y-hidden lg:overflow-hidden bg-[#f7f7f7] lg:bg-white dark:border-slate-800 dark:bg-transparent">
           {/* Left sidebar */}
           <LeftSidebar
             isLeftMenuOpen={isLeftMenuOpen}
@@ -98,7 +100,7 @@ export default function EventsLayout({
           />
 
           {/* Main calendar area */}
-          <main className="flex h-[500px] lg:min-h-[95vh] size-full flex-col gap-4 lg:flex-1 bg-[#f7f7f7] px-4 lg:px-8 py-2.5 lg:py-2 pb-0 lg:pb-2 lg:overflow-hidden overflow-y-auto">
+          <main className="flex h-[500px] lg:min-h-[95vh] size-full flex-col gap-4 lg:flex-1 bg-[#f7f7f7] dark:bg-[#121212] px-4 lg:px-8 py-2.5 lg:py-2 pb-0 lg:pb-2 lg:overflow-hidden overflow-y-auto">
             {children}
           </main>
 

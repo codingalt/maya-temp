@@ -3,7 +3,7 @@
 import { format } from "date-fns";
 import Link from "next/link";
 import EventModal from "./EventModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Define the event type
 interface Event {
@@ -27,11 +27,14 @@ export default function RightSidebar({
 }: RightSidebarProps) {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [formattedDate, setFormattedDate] = useState<string>("");
 
-  // Format date for display
-  const formatDate = () => {
-    return format(selectedDate, "MMMM d");
-  };
+  // Format date for display - update whenever selectedDate changes
+  useEffect(() => {
+    if (selectedDate) {
+      setFormattedDate(format(selectedDate, "MMMM d"));
+    }
+  }, [selectedDate]);
 
   // Format time for display
   const formatTime = (date: Date) => {
@@ -50,32 +53,34 @@ export default function RightSidebar({
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 lg:static flex flex-col gap-3 h-[calc(100%-550px)] max-h-[calc(100%-550px)] lg:max-h-full lg:h-full w-full lg:w-[290px] bg-white rounded-t-4xl lg:rounded-none lg:shadow-none shadow lg:bg-white shrink-0 border-l border-slate-100 px-5 lg:py-2 pt-6 lg:pt-4 pb-10 dark:border-slate-800 dark:bg-black">
+      <div className="fixed bottom-0 left-0 right-0 lg:static flex flex-col gap-3 h-[calc(100%-550px)] max-h-[calc(100%-550px)] lg:max-h-full lg:h-full w-full lg:w-[290px] bg-white rounded-t-4xl lg:rounded-none lg:shadow-none shadow lg:bg-white shrink-0 border-l border-slate-100 px-5 lg:py-2 pt-6 lg:pt-4 pb-10 dark:border-slate-800 dark:bg-transparent dark:text-white">
         {/* Event details heading */}
         <div className="flex flex-row items-center gap-1 sticky top-8">
-          <div className="shrink-0 text-xl lg:text-base cursor-pointer font-bold text-[#262626] hover:text-[#3e4774] active:text-[#363d63]">
-            {formatDate()}
+          <div className="shrink-0 text-xl lg:text-base cursor-pointer font-bold text-[#262626] hover:text-[#3e4774] active:text-[#363d63] dark:text-white">
+            {formattedDate}
           </div>
         </div>
         <div className="w-full flex-1 overflow-y-auto mt-1 lg:mt-3">
           <div className="flex flex-col items-start gap-2 text-xs">
-            {events.length === 0 ? (
-              <div className="text-[#8c8c8c] mt-1">No events on this day</div>
+            {!events || events.length === 0 ? (
+              <div className="text-[#8c8c8c] mt-1 dark:text-white/80">
+                No events on this day
+              </div>
             ) : (
               <div className="w-full space-y-3 mt-1.5">
                 {events.map((event) => (
                   <div
                     key={event.id}
-                    className="border rounded-md px-2.5 bg-white border-gray-200 py-3 lg:py-2 w-full cursor-pointer hover:bg-gray-50 transition-all"
+                    className="border rounded-md px-2.5 dark:border-slate-700 bg-white dark:bg-slate-900 dark:text-white border-gray-200 py-3 lg:py-3 w-full cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-800 transition-all"
                     onClick={() => handleEventClick(event)}
                   >
                     <div className="flex items-start">
                       <div className="w-1 h-full min-h-[28px] bg-gradient-to-r from-[#9B87F5] to-purple-700 rounded-sm mr-2 self-stretch" />
                       <div className="flex-1">
-                        <div className="font-medium text-gray-800">
+                        <div className="font-medium text-gray-800 dark:text-white">
                           {event.title}
                         </div>
-                        <div className="text-gray-500 text-xs">
+                        <div className="text-gray-500 dark:text-white/80 text-xs mt-0.5">
                           {event.allDay
                             ? "All day"
                             : `${formatTime(event.start)} - ${formatTime(
@@ -88,10 +93,10 @@ export default function RightSidebar({
                 ))}
               </div>
             )}
-            {events.length === 0 && (
+            {(!events || events.length === 0) && (
               <Link
                 href="/"
-                className="text-xs flex flex-row items-center gap-2 mt-2 text-[#737373] hover:underline"
+                className="text-xs flex flex-row items-center gap-2 mt-2 text-[#737373] dark:text-white/80 hover:underline"
               >
                 <svg
                   className="size-4"

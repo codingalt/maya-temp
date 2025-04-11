@@ -48,12 +48,20 @@ body {
 }
 
 .fc-dayGridMonth-view .fc-day-other .fc-daygrid-day-frame {
-  @apply bg-white/45;
+  @apply bg-white/45 dark:bg-slate-900/75 dark:border-slate-900 dark:border;;
+}
+
+.fc .fc-list-event-title a{
+  @apply dark:text-white/80;
 }
 
 .fc-dayGridMonth-view .fc-day-other .fc-daygrid-day-number {
-  color: #000 !important; /* Lighter text for other month days */
   font-weight: 400 !important;
+  @apply !text-black dark:!text-white/55;
+}
+
+.fc .fc-highlight{
+  background-color: transparent;
 }
 
 /* Fix calendar wrapper to enable scrolling */
@@ -85,10 +93,11 @@ body {
     135,
     245,
     0.05
-  ) !important; /* !important to override any other styles */
+  ) !important; 
   border: 2px solid #9b87f5 !important;
   outline: none !important;
   box-shadow: 0 1px 2px rgba(155, 135, 245, 0.1) !important;
+  @apply dark:!bg-slate-800 dark:!border-slate-600;
 }
 
 .fc .selected-day:focus .fc-daygrid-day-frame,
@@ -98,6 +107,7 @@ body {
   /* Ensure focus/active states don't override our styling */
   background-color: rgba(155, 135, 245, 0.05) !important;
   border: 2px solid #9b87f5 !important;
+  @apply dark:!bg-slate-800 dark:!border-slate-600;
 }
 
 /* Base styles */
@@ -125,23 +135,24 @@ body {
   min-height: 105px;
   overflow: hidden;
   position: relative;
-  transition: all 30ms ease;
+  transition: all 40ms ease;
   outline: none !important;
+  @apply dark:bg-slate-900 dark:border-slate-800 dark:border;
 }
 
 .fc .fc-daygrid-day-frame:hover {
-  @apply cursor-pointer;
+  @apply cursor-pointer dark:bg-slate-800;
   background-color: rgba(243, 244, 246, 0.5); /* Very light hover effect */
 }
 
-.fc .fc-daygrid-day-frame:focus {
+/* .fc .fc-daygrid-day-frame:focus {
   @apply !bg-purple-100;
-}
+} */
 
 /* Header styling */
 .fc .fc-col-header-cell {
   padding-bottom: 5px;
-  @apply bg-[#f7f7f7];
+  @apply bg-[#f7f7f7] dark:bg-[#121212];
 }
 
 .fc .fc-col-header-cell-cushion {
@@ -161,10 +172,11 @@ body {
 }
 
 .fc .fc-daygrid-day-number {
-  color: #606674; /* text-gray-500 */
+  color: #606674; 
   font-size: 14px;
   font-weight: 500;
   text-decoration: none !important;
+  @apply dark:text-white/50;
 }
 
 .fc .fc-day-today .fc-daygrid-day-number {
@@ -283,13 +295,8 @@ body {
 
 .fc .fc-button-primary:not(:disabled):active,
 .fc .fc-button-primary:not(:disabled).fc-button-active {
-  /* background-color: #8b5cf6;  */
   color: white;
 }
-
-/* .fc .fc-button-primary:hover {
-  background-color: #f9fafb; 
-} */
 
 .fc .fc-button-primary:disabled {
   background-color: transparent;
@@ -321,12 +328,6 @@ body {
   border: none;
   color: #6b7280; /* gray-500 */
 }
-
-/* .fc .fc-prev-button:hover,
-.fc .fc-next-button:hover {
-  background-color: #f3f4f6; 
-  color: #374151;
-} */
 
 /* Hide license message */
 .fc-license-message {
@@ -448,16 +449,17 @@ body {
 
 .fc-list-event {
   border: none !important;
+  @apply dark:hover:!bg-transparent;
 }
 
 .fc-list-event:hover td {
-  background-color: #f3f4f6 !important;
+  background-color: transparent !important;
   @apply border-gray-600;
 }
 
 .fc-list-event-time {
-  color: #6b7280; /* gray-500 */
   font-size: 12px;
+  @apply dark:text-white/70 text-[#6b7280];
 }
 
 .fc-list-event-title {
@@ -547,6 +549,7 @@ body {
     box-shadow: none !important;
     border-radius: 0 !important;
     background-color: transparent !important;
+    @apply border-none;
   }
 
   .fc-dayGridMonth-view .fc-scrollgrid-sync-table tr {
@@ -607,37 +610,9 @@ body {
     height: auto !important;
     display: inline-block !important;
     background-color: transparent !important;
-    color: #444 !important;
     border-radius: 0 !important;
+    @apply !text-[#444] dark:!text-white/50;
   }
-
-  /* 2. Style for today */
-  /* .fc .fc-day-today:not(.selected-day) .fc-daygrid-day-number {
-    width: 32px !important;
-    height: 32px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background-color: #262626 !important;
-    color: white !important;
-    border-radius: 50% !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-  } */
-
-  /* 3. Style for manually selected day (takes precedence over today) */
-  /* .fc .fc-daygrid-day.selected-day .fc-daygrid-day-number {
-    width: 32px !important;
-    height: 32px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background-color: #262626 !important;
-    color: white !important;
-    border-radius: 50% !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-  } */
 
   .fc .selected-day .fc-daygrid-day-frame {
     background-color: transparent !important;
@@ -651,11 +626,11 @@ body {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    background-color: #262626 !important;
     color: white !important;
     border-radius: 50% !important;
     margin: 0 auto !important;
     padding: 0 !important;
+    @apply dark:!bg-gradient-to-r from-[#9B87F5] to-purple-700 bg-[#262626];
   }
 
   /* 4. When day is both today AND selected, prioritize selected styling */

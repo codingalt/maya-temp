@@ -51,7 +51,7 @@ export default function RightSidebar({
 
   return (
     <>
-      <div className="flex flex-col gap-3 h-auto lg:h-full w-full lg:w-[260px] bg-[#f7f7f7] lg:bg-white shrink-0 border-l border-slate-100 px-4 lg:px-5 lg:py-2 pt-4 pb-10 dark:border-slate-800 dark:bg-black">
+      <div className="fixed bottom-0 left-0 right-0 lg:static flex flex-col gap-3 h-[calc(100%-550px)] max-h-[calc(100%-550px)] lg:max-h-full lg:h-full w-full lg:w-[290px] bg-white rounded-t-4xl lg:rounded-none lg:shadow-none shadow lg:bg-white shrink-0 border-l border-slate-100 px-5 lg:py-2 pt-6 lg:pt-4 pb-10 dark:border-slate-800 dark:bg-black">
         {/* Event details heading */}
         <div className="flex flex-row items-center gap-1 sticky top-8">
           <div className="shrink-0 text-xl lg:text-base cursor-pointer font-bold text-[#262626] hover:text-[#3e4774] active:text-[#363d63]">

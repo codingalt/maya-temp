@@ -18,7 +18,6 @@ interface Event {
   id: string;
   title: string;
   description?: string;
-  color: string;
   textColor: string;
   allDay: boolean;
   start: Date;
@@ -31,7 +30,6 @@ const sampleEvents: Event[] = [
     id: "1",
     title: "Meeting with Team",
     description: "Discuss project progress",
-    color: "#f97316", // orange-500
     textColor: "#ffffff",
     allDay: false,
     start: new Date(2025, 3, 12, 10, 0),
@@ -41,7 +39,7 @@ const sampleEvents: Event[] = [
     id: "2",
     title: "Lunch with Client",
     description: "Discuss new requirements",
-    color: "#f97316", // orange-500
+   
     textColor: "#ffffff",
     allDay: false,
     start: new Date(2025, 3, 9, 12, 30),
@@ -51,7 +49,7 @@ const sampleEvents: Event[] = [
     id: "3",
     title: "Lunch with Client",
     description: "Discuss new requirements",
-    color: "#f97316", // orange-500
+   
     textColor: "#ffffff",
     allDay: false,
     start: new Date(2025, 3, 9, 12, 30),
@@ -61,7 +59,7 @@ const sampleEvents: Event[] = [
     id: "4",
     title: "Lunch with Client",
     description: "Discuss new requirements",
-    color: "#f97316", // orange-500
+   
     textColor: "#ffffff",
     allDay: false,
     start: new Date(2025, 3, 9, 12, 30),
@@ -322,12 +320,12 @@ export default function Calendar({ onDaySelect }: CalendarProps) {
             editable={false} // Events are not editable
             selectable={true}
             selectMirror={false}
-            dayMaxEvents={2} // Limit visible events before "+more"
+            dayMaxEvents={isMediumDevice ? 1 : 2} // Limit visible events before "+more"
             weekends={true}
             events={events}
             dateClick={handleDateClick}
             eventClick={handleEventSelect}
-            height={isMediumDevice ? "auto" : "85vh"}
+            height={isMediumDevice ? "auto" : "88vh"}
             showNonCurrentDates={true} // Show other month dates with different styling
             fixedWeekCount={false} // Don't force 6 weeks display
             contentHeight="auto"

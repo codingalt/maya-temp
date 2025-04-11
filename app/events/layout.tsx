@@ -91,7 +91,7 @@ export default function EventsLayout({
         </nav>
 
         {/* Main content with 3 columns */}
-        <div className="flex flex-col lg:flex-row relative w-full lg:flex-1 justify-center overflow-y-auto lg:overflow-y-hidden lg:overflow-hidden bg-white">
+        <div className="flex flex-col lg:flex-row relative w-full lg:flex-1 justify-center overflow-y-auto lg:overflow-y-hidden lg:overflow-hidden bg-[#f7f7f7] lg:bg-white">
           {/* Left sidebar */}
           <LeftSidebar
             isLeftMenuOpen={isLeftMenuOpen}
@@ -99,7 +99,7 @@ export default function EventsLayout({
           />
 
           {/* Main calendar area */}
-          <main className="flex lg:min-h-[95vh] size-full flex-col gap-4 h-full lg:flex-1 bg-[#f7f7f7] px-4 py-2 pb-0 lg:pb-2 lg:overflow-hidden overflow-y-auto">
+          <main className="flex h-[500px] lg:min-h-[95vh] size-full flex-col gap-4 lg:flex-1 bg-[#f7f7f7] px-4 lg:px-6 py-2.5 lg:py-2 pb-0 lg:pb-2 lg:overflow-hidden overflow-y-auto">
             {children}
           </main>
 

@@ -40,7 +40,7 @@ const LeftSidebar = ({
       {/* Desktop Static Sidebar */}
       <aside
         className={`hidden h-full ${
-          isLeftMenuOpen ? "w-0 -translate-96 hidden" : "w-[210px] lg:block"
+          isLeftMenuOpen ? "w-0 -translate-96 hidden" : "w-[230px] lg:block"
         } transition-all shrink-0 overflow-auto border-r border-slate-100 px-4 py-2 dark:border-slate-800 dark:bg-black`}
       >
         <SidebarContent />

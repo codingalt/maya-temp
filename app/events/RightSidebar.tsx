@@ -10,7 +10,6 @@ interface Event {
   id: string;
   title: string;
   description?: string;
-  color: string;
   textColor: string;
   allDay: boolean;
   start: Date;

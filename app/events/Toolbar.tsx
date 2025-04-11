@@ -23,16 +23,6 @@ const viewOptions = [
     icon: Category,
   },
   {
-    label: "Week",
-    value: "timeGridWeek",
-    icon: Grid6,
-  },
-  {
-    label: "Day",
-    value: "timeGridDay",
-    icon: Calendar1,
-  },
-  {
     label: "Agenda",
     value: "listWeek",
     icon: TableDocument,

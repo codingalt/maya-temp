@@ -8,7 +8,6 @@ interface Event {
   id: string;
   title: string;
   description?: string;
-  color: string;
   textColor: string;
   allDay: boolean;
   start: Date;
@@ -76,7 +75,6 @@ export default function EventModal({ event, onClose }: EventModalProps) {
         {/* Header with color */}
         <div
           className="h-1.5 w-full bg-gradient-to-r from-[#9B87F5] to-purple-700"
-          style={{ backgroundColor: event.color }}
         ></div>
 
         {/* Content */}

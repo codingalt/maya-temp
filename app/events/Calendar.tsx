@@ -39,7 +39,6 @@ const sampleEvents: Event[] = [
     id: "2",
     title: "Lunch with Client",
     description: "Discuss new requirements",
-   
     textColor: "#ffffff",
     allDay: false,
     start: new Date(2025, 3, 9, 12, 30),
@@ -49,7 +48,6 @@ const sampleEvents: Event[] = [
     id: "3",
     title: "Lunch with Client",
     description: "Discuss new requirements",
-   
     textColor: "#ffffff",
     allDay: false,
     start: new Date(2025, 3, 9, 12, 30),
@@ -59,7 +57,6 @@ const sampleEvents: Event[] = [
     id: "4",
     title: "Lunch with Client",
     description: "Discuss new requirements",
-   
     textColor: "#ffffff",
     allDay: false,
     start: new Date(2025, 3, 9, 12, 30),
